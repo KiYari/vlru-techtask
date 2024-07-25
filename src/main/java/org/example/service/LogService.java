@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -18,6 +19,8 @@ public class LogService {
     private LocalDateTime start = LocalDateTime.MIN;
     private LocalDateTime stop = LocalDateTime.MIN;
     private Double accessibilityMinimumForDropPeriod = 100.0;
+    private Boolean shouldPrint = false;
+    private final Long MINIMAL_OUTPUT_SAMPLING = 1L;
 
     private final Pattern pattern = Pattern.compile(
             "^(\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3})\\s-\\s-\\s\\[(.*?)\\]\\s\"(PUT|GET|POST|DELETE|HEAD)\\s(\\/[^?\\s]*)(\\?[^\"\\s]*)?\\sHTTP\\/1\\.1\"\\s(\\d{3})\\s(\\d+)\\s([\\d.]+)\\s\"-\"?\\s\"([^\"]*)\"?(\\sprio:\\d)?$",
@@ -66,11 +69,20 @@ public class LogService {
         if ((isLast &&  !start.equals(LocalDateTime.MIN) && !accessibilityMinimumForDropPeriod.equals(100.0) )
                 || (targetAccessibility <= this.accessibility && !start.equals(LocalDateTime.MIN) && !accessibilityMinimumForDropPeriod.equals(100.0))) {
             stop = parsedLog.getTimestamp();
+            shouldPrint = true;
+        }
+
+        if (isMinimalTimeBeforeLastOutputPassed() && shouldPrint) {
+            shouldPrint = false;
             System.out.println(formatter.format(start) + " " + formatter.format(stop) + " " + (accessibilityMinimumForDropPeriod + this.accessibility)/2);
             start = LocalDateTime.MIN;
             accessibilityMinimumForDropPeriod = 100.0;
             stop = LocalDateTime.MIN;
         }
+    }
+
+    private Boolean isMinimalTimeBeforeLastOutputPassed() {
+        return ChronoUnit.SECONDS.between(start, stop) > MINIMAL_OUTPUT_SAMPLING;
     }
 
     private void tickAccessibility(Boolean isAccessible) {

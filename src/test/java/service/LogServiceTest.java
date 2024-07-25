@@ -18,16 +18,16 @@ public class LogServiceTest {
 
     @BeforeEach
     public void setup() {
-        logs.add("192.168.32.181 - - [14/06/2017:16:48:00 +1000] \"PUT /rest/v1.4/documents?zone=default&_rid=4a18e7b7 HTTP/1.1\" 200 2 14.488751 \"-\" \"@list-item-updater\" prio:0");
-        logs.add("192.168.32.181 - - [14/06/2017:16:48:05 +1000] \"PUT /rest/v1.4/documents?zone=default&_rid=8204439 HTTP/1.1\" 200 2 17.874763 \"-\" \"@list-item-updater\" prio:0");
-        logs.add("192.168.32.181 - - [14/06/2017:16:48:10 +1000] \"PUT /rest/v1.4/documents?zone=default&_rid=e1e3f391 HTTP/1.1\" 200 2 13.85702 \"-\" \"@list-item-updater\" prio:0");
-        logs.add("192.168.32.181 - - [14/06/2017:16:48:15 +1000] \"PUT /rest/v1.4/documents?zone=default&_rid=4a18e7b7 HTTP/1.1\" 200 2 14.488751 \"-\" \"@list-item-updater\" prio:0");
-        logs.add("192.168.32.181 - - [14/06/2017:16:48:20 +1000] \"PUT /rest/v1.4/documents?zone=default&_rid=8204439 HTTP/1.1\" 200 2 17.874763 \"-\" \"@list-item-updater\" prio:0");
-        logs.add("192.168.32.181 - - [14/06/2017:16:48:25 +1000] \"PUT /rest/v1.4/documents?zone=default&_rid=e1e3f391 HTTP/1.1\" 200 2 13.85702 \"-\" \"@list-item-updater\" prio:0");
+        logs.add("192.168.32.181 - - [14/06/2017:16:00:00 +1000] \"PUT /rest/v1.4/documents?zone=default&_rid=4a18e7b7 HTTP/1.1\" 200 2 14.488751 \"-\" \"@list-item-updater\" prio:0");
+        logs.add("192.168.32.181 - - [14/06/2017:16:00:00 +1000] \"PUT /rest/v1.4/documents?zone=default&_rid=8204439 HTTP/1.1\" 200 2 17.874763 \"-\" \"@list-item-updater\" prio:0");
+        logs.add("192.168.32.181 - - [14/06/2017:16:10:10 +1000] \"PUT /rest/v1.4/documents?zone=default&_rid=e1e3f391 HTTP/1.1\" 200 2 13.85702 \"-\" \"@list-item-updater\" prio:0");
+        logs.add("192.168.32.181 - - [14/06/2017:16:15:15 +1000] \"PUT /rest/v1.4/documents?zone=default&_rid=4a18e7b7 HTTP/1.1\" 200 2 14.488751 \"-\" \"@list-item-updater\" prio:0");
+        logs.add("192.168.32.181 - - [14/06/2017:16:20:20 +1000] \"PUT /rest/v1.4/documents?zone=default&_rid=8204439 HTTP/1.1\" 200 2 17.874763 \"-\" \"@list-item-updater\" prio:0");
+        logs.add("192.168.32.181 - - [14/06/2017:16:25:25 +1000] \"PUT /rest/v1.4/documents?zone=default&_rid=e1e3f391 HTTP/1.1\" 200 2 13.85702 \"-\" \"@list-item-updater\" prio:0");
 
-        logs.add("192.168.32.181 - - [14/06/2017:16:48:15 +1000] \"PUT /rest/v1.4/documents?zone=default&_rid=e1e3f391 HTTP/1.1\" 501 2 12.85702 \"-\" \"@list-item-updater\" prio:0");
-        logs.add("192.168.32.181 - - [14/06/2017:16:48:18 +1000] \"PUT /rest/v1.4/documents?zone=default&_rid=e1e3f391 HTTP/1.1\" 200 2 45.85702 \"-\" \"@list-item-updater\" prio:0");
-        logs.add("192.168.32.181 - - [14/06/2017:16:48:19 +1000] \"PUT /rest/v1.4/documents?zone=default&_rid=e1e3f391 HTTP/1.1\" 200 2 45.0 \"-\" \"@list-item-updater\" prio:0");
+        logs.add("192.168.32.181 - - [14/06/2017:16:15:15 +1000] \"PUT /rest/v1.4/documents?zone=default&_rid=e1e3f391 HTTP/1.1\" 501 2 12.85702 \"-\" \"@list-item-updater\" prio:0");
+        logs.add("192.168.32.181 - - [14/06/2017:16:18:18 +1000] \"PUT /rest/v1.4/documents?zone=default&_rid=e1e3f391 HTTP/1.1\" 200 2 45.85702 \"-\" \"@list-item-updater\" prio:0");
+        logs.add("192.168.32.181 - - [14/06/2017:16:19:19 +1000] \"PUT /rest/v1.4/documents?zone=default&_rid=e1e3f391 HTTP/1.1\" 200 2 45.0 \"-\" \"@list-item-updater\" prio:0");
 
         incorrectLogs.add("apple");
         incorrectLogs.add("666.666.6666.666666 - - [14/06/2017:16:48:52 +1000] \"PUT /rest/v1.4/documents?zone=default&_rid=e1e3f391 HTTP/1.1\" 200 2 13.85702 \"-\" \"@list-item-updater\" prio:0");
@@ -97,7 +97,7 @@ public class LogServiceTest {
             logService.processLog(logs.get(5), 45L, 75.0, false);
             logService.processLog(logs.get(5), 45L, 75.0, false);
             logService.processLog(logs.get(5), 45L, 75.0, true);
-            assertTrue(cc.getStandardOutput().contains("09:48:18 09:48:25 70.83333333333333"));
+            assertTrue(cc.getStandardOutput().contains("09:18:18 09:25:25 70.83333333333333"));
 
         }
     }
@@ -112,7 +112,7 @@ public class LogServiceTest {
             logService.processLog(logs.get(7), 45L, 75.0, false);
             logService.processLog(logs.get(4), 45L, 75.0, false);
             logService.processLog(logs.get(5), 45L, 75.0, true);
-            assertTrue(cc.getStandardOutput().contains("09:48:18 09:48:25 65.71428571428572"));
+            assertTrue(cc.getStandardOutput().contains("09:18:18 09:25:25 65.71428571428572"));
 
         }
     }
